@@ -1,0 +1,27 @@
+server:
+  port: 8084
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        name: JSESSIONID  # 쿠키 이름 설정 (기본값: JSESSIONID)
+        http-only: true    # HTTP 전용 설정 (JavaScript로 접근 불가)
+        secure: false       # HTTPS에서만 쿠키 전송
+        same-site: lax    # SameSite 설정
+        max-age: 3600      # 세션 쿠키 유효 기간 설정 (초 단위)
+
+spring:
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: jdbc:mysql://localhost:3306/apiboard6?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: Sleep1205!
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
