@@ -8,12 +8,12 @@ import AppNavbar from './layout/AppNavbar';
 function App() {
 
   return (
-    <UserProvider>
-      <Router>
+    <Router>
+      <UserProvider>
         <AppNavbar />
         <AppRoutes />
-      </Router>
-    </UserProvider>
+      </UserProvider>
+    </Router>
   );
 }
 

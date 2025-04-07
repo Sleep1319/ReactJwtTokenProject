@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { setTokens, getUserFromToken } from "../utils/jwt.js";
 
 
 
@@ -22,41 +23,36 @@ function SignIn() {
         }
         try {
             // 로그인 요청
-            await axios.post("/api/sign-in", {
-                email,
-                password
-            }, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await axios.post("/api/sign-in", { email, password });
+            console.log("✅ 로그인 요청 성공");
 
-            console.log("✅ 로그인 요청 성공:");
+            const { accessToken, refreshToken } = response.data;
 
-            try {
-            // 로그인 후 세션에서 사용자 정보 가져오기
-                const response = await axios.get("/api/user", {
-                    withCredentials: true
-                });
+            // 🔹 유틸 함수로 토큰 저장
+            setTokens(accessToken, refreshToken);
 
-                if (response.data) {
-                    console.log("✅ 세션에서 사용자 정보 가져옴:", response.data);
-                    setState(response.data); // UserContext 상태 업데이트
-                    sessionStorage.setItem("user", JSON.stringify(response.data)); // 세션 유지
-
-                    alert("로그인 성공!");
-                    navigate("/");
-                }
-            } catch (error) {
-                alert("로그인 성공했지만 가져올 수있는 사용자 정보가 없음");
+            // 🔹 유저 정보 가져와서 상태 업데이트
+            const user = getUserFromToken();
+            if (user) {
+                setState(user);
+                console.log("✅ 로그인한 유저 정보:", user);
+                alert("로그인 성공")
+                navigate("/"); // 🔹 로그인 성공 시 메인 페이지로 이동
+            } else {
+                alert("로그인 정보가 유효하지 않습니다.");
             }
+
         } catch (error) {
             console.error("로그인 에러: ", error);
-            alert("로그인 실패! 다시 시도해주세요.");
+
+            if (error.response) {
+                alert(error.response.data.error);
+                }
+            else {
+                alert("로그인 요청 에러")
+            }
         }
     };
-
 
     return (
     <main className="main">

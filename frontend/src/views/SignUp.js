@@ -13,7 +13,7 @@ function SignUp() {
 
         if (!email || !password || !username || !nickname) {
             alert("모든 필드를 입력하세요.");
-            return;
+            return; 
         }
 
         try {
@@ -28,17 +28,13 @@ function SignUp() {
             window.location.href="/sign-in";
         } catch (error) {
             console.error("회원가입 오류: ", error);
-            if (error.response && error.response.status === 400) {
-
-                const errors = error.response.data;
-                let errorMessage = "";
-
-                for (const field in errors) {
-                    errorMessage += `${errors[field]}\n`;
-                }
-                console.log("에러메시지", errorMessage)
-                alert(errorMessage);
+            if (error.response) {
+                alert(error.response.data.error);
             }
+            else  {
+                alert("회원가입 요청 실패")
+            }   
+            
             resetForm();
         }
     };

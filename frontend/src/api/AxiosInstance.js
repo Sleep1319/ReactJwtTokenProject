@@ -1,8 +1,15 @@
-import axios from 'axios';
 
-// axios 인스턴스를 생성하고, baseURL을 설정
-const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8084',  // 기본 URL 설정 (Spring Boot 서버 주소)
+import axios from "axios";
+
+const instance = axios.create();
+
+instance.interceptors.request.use((config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
 });
-
-export default axiosInstance;
+export default instance

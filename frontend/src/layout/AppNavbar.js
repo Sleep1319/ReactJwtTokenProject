@@ -13,7 +13,7 @@ function AppNavbar( ) {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav">
-                        {!state?.id ? (
+                        {!state?.email ? (
                             <>
                             <li className="nav-item">
                                 <Link to="/sign-in" className="nav-link">로그인</Link>

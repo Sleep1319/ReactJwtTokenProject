@@ -1,4 +1,4 @@
-package com.apiboad6.reactjwttokenproject.config;
+package com.apiboad6.reactjwttokenproject.handler;
 
 import com.apiboad6.reactjwttokenproject.exception.MemberEmailAlreadyExistsException;
 import com.apiboad6.reactjwttokenproject.exception.MemberNicknameAlreadyExistsException;
