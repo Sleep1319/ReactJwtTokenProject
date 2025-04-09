@@ -48,12 +48,13 @@ public class JwtTokenProvider {
     }
     
     //토큰 생성
-    public String createAccessToken(String email, String username, String nickname, String roleName) {
+    public String createAccessToken(String email, int id, String username, String nickname, String roleName) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + accessTokenValidity);
 
         return Jwts.builder()
                 .subject(email)
+                .claim("id", id)
                 .claim("username", username)
                 .claim("nickname", nickname)
                 .claim("roleName", roleName)

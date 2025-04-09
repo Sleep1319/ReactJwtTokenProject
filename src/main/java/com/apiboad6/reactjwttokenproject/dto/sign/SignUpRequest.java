@@ -1,4 +1,4 @@
-package com.apiboad6.reactjwttokenproject.dto;
+package com.apiboad6.reactjwttokenproject.dto.sign;
 
 import com.apiboad6.reactjwttokenproject.domain.member.Member;
 import com.apiboad6.reactjwttokenproject.domain.member.Roles;

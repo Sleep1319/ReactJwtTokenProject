@@ -38,7 +38,11 @@ public class SecurityConfig {
                         .permitAll() // GET 요청에 대한 접근 허용
                         .requestMatchers(HttpMethod.POST, "/api/sign-up", "/api/sign-in", "/api/write-board/")
                         .permitAll() // POST 요청에 대한 접근 허용
-                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
+                        .requestMatchers(HttpMethod.PUT, "/api/board/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/board/**")
+                        .permitAll()
+                        .anyRequest().permitAll() // 그 외의 모든 요청은 인증 해제 (테스트용)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

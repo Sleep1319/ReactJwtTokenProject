@@ -4,7 +4,7 @@ import { useUser } from "../context/UserContext";
 
 function ProtectedRoute({ requireAuth }) {
     const { state } = useUser();
-    const logIn = state && state.userId;
+    const logIn = state && state.memberId;
     
     if (!requireAuth && logIn) {
         return <Navigate to="/" replace />;//상태값에 따라 강제이동 로그인 상태면 강제이동

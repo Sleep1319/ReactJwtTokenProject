@@ -2,10 +2,10 @@ package com.apiboad6.reactjwttokenproject.service;
 
 import com.apiboad6.reactjwttokenproject.config.jwt.JwtTokenProvider;
 import com.apiboad6.reactjwttokenproject.domain.member.Roles;
-import com.apiboad6.reactjwttokenproject.dto.SignInQueryResult;
-import com.apiboad6.reactjwttokenproject.dto.SignInRequest;
-import com.apiboad6.reactjwttokenproject.dto.SignInResponse;
-import com.apiboad6.reactjwttokenproject.dto.SignUpRequest;
+import com.apiboad6.reactjwttokenproject.dto.sign.SignInQueryResult;
+import com.apiboad6.reactjwttokenproject.dto.sign.SignInRequest;
+import com.apiboad6.reactjwttokenproject.dto.sign.SignInResponse;
+import com.apiboad6.reactjwttokenproject.dto.sign.SignUpRequest;
 import com.apiboad6.reactjwttokenproject.exception.MemberEmailAlreadyExistsException;
 import com.apiboad6.reactjwttokenproject.exception.MemberNicknameAlreadyExistsException;
 import com.apiboad6.reactjwttokenproject.exception.NotFoundRoleIdException;
@@ -41,8 +41,8 @@ public class SignService {
         // 🔹 비밀번호 검증
         validateSignInPassword(req.getPassword(), queryResult.getPassword());
 
-        // 🔹 JWT 토큰 생성
-        String accessToken = jwtTokenProvider.createAccessToken(queryResult.getEmail(), queryResult.getUsername(), queryResult.getNickname(), queryResult.getRoleName());
+        // 🔹 JWT 토큰 생성 (순서 밎 생성시 메인 객체 변경 필요)
+        String accessToken = jwtTokenProvider.createAccessToken(queryResult.getEmail(), queryResult.getId(), queryResult.getUsername(), queryResult.getNickname(), queryResult.getRoleName());
         String refreshToken = jwtTokenProvider.createRefreshToken(queryResult.getEmail());
 
         // 🔹 응답 DTO 생성

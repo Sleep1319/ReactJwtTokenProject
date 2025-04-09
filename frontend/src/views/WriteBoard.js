@@ -2,13 +2,15 @@ import axios from "axios";
 import React, {useRef} from "react";
 import { Link, useNavigate } from "react-router-dom"; 
 import { useUser } from "../context/UserContext";
+import {getAccessToken} from "../utils/jwt";
 
 function WriteBoard() {
     const { state } = useUser();
     const title = useRef(); //한 번만 가져와서 서버로 보내고 이동하는 기능이기에 useState로 상태 처리 없이 사용
     const content = useRef();
-    const memberId = state?.userId
+    const memberId = state?.memberId
     const navigate = useNavigate();
+    const token = getAccessToken();
 
     const writeBoard = async (e) => {
         e.preventDefault();
@@ -25,11 +27,17 @@ function WriteBoard() {
 
         try {
             const response = await axios.post("/api/write-board", {
+                memberId,
                 title: title.current.value,
-                content: content.current.value,
-                memberId
-            });
-            alert(response.data.message);
+                content: content.current.value
+
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+            alert("등록 완료");
             navigate("/");
         } catch (error) {
             console.error("게시글 등록오류", error);
@@ -48,7 +56,7 @@ function WriteBoard() {
         <main className="main">
             <form id="writeForm" onSubmit={writeBoard}>
                 <div className="mb-3">
-                    <label htmlfor="exampleFormControlInput1" className="form-label">제목</label>
+                    <label htmlFor="exampleFormControlInput1" className="form-label">제목</label>
                     <input type="text" className="form-control" id="exampleFormControlInput1" ref={title}/>
                 </div>
                 <div className="mb-3">

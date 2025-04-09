@@ -16,11 +16,17 @@ function Board() {
     useEffect(() => {
         const getBoardById = async () => {
             try {
-                const response = await axios.get(`/api/post/${id}`);
+                const response = await axios.get(`/api/board/${id}`);
                 setPost(response.data || { title: "", nickname: "", content: "" });
                 console.log("서버 응답:", response.data);
             } catch (error) {
-                console.error("불러오기 실패", error); 
+                console.error("불러오기 실패", error);
+                if (error.response) {
+                    alert(error.response.data.error);
+                }
+                else {
+                    alert("게시글 조회 에러")
+                }
             }
         };
     
@@ -31,13 +37,16 @@ function Board() {
         if (!window.confirm("정말로 수정하시겠습니까??")) return;
 
         try {
-            const response = await axios.put(`/api/update-board/${id}`, { content: editedContent });
+            const response = await axios.put(`/api/board/${id}`, {
+                title: post.title,
+                content: editedContent
+            });
             setPost((prevPost) => ({ ...prevPost, content: editedContent }));
             setIsReadOnly(true);
-            alert(response.data.message);
+            alert("수정 완료");
         } catch (error) {
             console.error("수정 실패", error.response)
-            alert("수정실패");
+            alert("수정 실패");
         }
     };
 
@@ -45,8 +54,8 @@ function Board() {
         if (!window.confirm("글을 삭제하시겠습니까?")) return;
         
         try {
-            const response = await axios.delete(`/api/delete-board/${id}`);
-            alert(response.data.message)
+            const response = await axios.delete(`/api/board/${id}`);
+            alert("삭제 완료")
             navigate("/");
         } catch (error) {
             console.error("삭제 실패", error);
@@ -87,7 +96,7 @@ function Board() {
                     <textarea className="form-control" id="content" rows="20" value={editedContent} readOnly={isReadOnly} onChange={(e) => setEditedContent(e.target.value)}></textarea>
                 </div>
             </form>
-            {post && post.member_id && Number(state?.userId) === Number(post.member_id) && (
+            {post && post.memberId && Number(state?.memberId) === Number(post.memberId) && (
                 <>
                     {isReadOnly ? (
                         <button className="btn btn-warning" onClick={() => setIsReadOnly(false)}>수정하기</button>
@@ -99,7 +108,7 @@ function Board() {
                     )}
                 </>
             )}
-            {(post && post.member_id && (Number(state?.userId) === Number(post.member_id) || state.roleName === "ADMIN")) && (
+            {(post && post.memberId && (Number(state?.memberId) === Number(<post className="memberId"></post>) || state.roleName === "ADMIN")) && (
                 <button className="btn btn-danger" onClick={deleteBoard}>글 삭제</button>
             )}
             <Link to="/">메인으로 돌아가기</Link>

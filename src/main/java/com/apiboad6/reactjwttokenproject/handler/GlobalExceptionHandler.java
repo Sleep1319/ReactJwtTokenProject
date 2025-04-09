@@ -1,9 +1,6 @@
 package com.apiboad6.reactjwttokenproject.handler;
 
-import com.apiboad6.reactjwttokenproject.exception.MemberEmailAlreadyExistsException;
-import com.apiboad6.reactjwttokenproject.exception.MemberNicknameAlreadyExistsException;
-import com.apiboad6.reactjwttokenproject.exception.NotFoundRoleIdException;
-import com.apiboad6.reactjwttokenproject.exception.SignInFailureException;
+import com.apiboad6.reactjwttokenproject.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,6 +37,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 Map.of("error", "이메일 또는 비밀번호가 다릅니다.")
             );
+    }
+
+    @ExceptionHandler(NotFoundBoardException.class)
+    public ResponseEntity<?> handleNotFoundBoardException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("errpr", "해당 게시글을 찾을 수 없습니다.")
+        );
     }
 
     @ExceptionHandler(Exception.class)

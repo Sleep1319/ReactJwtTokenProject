@@ -1,8 +1,8 @@
 package com.apiboad6.reactjwttokenproject.controller.sign;
 
-import com.apiboad6.reactjwttokenproject.dto.SignInRequest;
-import com.apiboad6.reactjwttokenproject.dto.SignInResponse;
-import com.apiboad6.reactjwttokenproject.dto.SignUpRequest;
+import com.apiboad6.reactjwttokenproject.dto.sign.SignInRequest;
+import com.apiboad6.reactjwttokenproject.dto.sign.SignInResponse;
+import com.apiboad6.reactjwttokenproject.dto.sign.SignUpRequest;
 import com.apiboad6.reactjwttokenproject.service.SignService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

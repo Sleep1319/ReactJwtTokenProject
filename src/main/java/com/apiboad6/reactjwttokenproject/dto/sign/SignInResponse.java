@@ -1,4 +1,4 @@
-package com.apiboad6.reactjwttokenproject.dto;
+package com.apiboad6.reactjwttokenproject.dto.sign;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

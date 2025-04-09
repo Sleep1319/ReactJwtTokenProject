@@ -40,6 +40,7 @@ export function getUserFromToken() {
         if (decoded && decoded.exp * 1000 > Date.now()) {
             return {
                 email: decoded.sub,
+                memberId: decoded.id,
                 username: decoded.username,
                 nickname: decoded.nickname,
                 roleName: decoded.roleName
