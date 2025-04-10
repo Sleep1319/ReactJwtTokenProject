@@ -94,3 +94,46 @@
 //         }
 //     }
 // };
+
+//토큰
+// import axios from "axios";
+// import {getUserFromToken, setTokens} from "../utils/jwt";
+//
+// const signIn = async (e) => {
+//     e.preventDefault();
+//     if(!email || !password) {
+//         alert('아이디와 비밀번호를 입력해 주세요')
+//         return;
+//     }
+//     try {
+//         // 로그인 요청
+//         const response = await axios.post("/api/sign-in", { email, password }, );
+//         console.log("✅ 로그인 요청 성공");
+//
+//         const { accessToken, refreshToken } = response.data;
+//
+//         // 🔹 유틸 함수로 토큰 저장
+//         setTokens(accessToken, refreshToken);
+//
+//         // 🔹 유저 정보 가져와서 상태 업데이트
+//         const user = getUserFromToken();
+//         if (user) {
+//             setState(user);
+//             console.log("✅ 로그인한 유저 정보:", user);
+//             alert("로그인 성공")
+//             navigate("/"); // 🔹 로그인 성공 시 메인 페이지로 이동
+//         } else {
+//             alert("로그인 정보가 유효하지 않습니다.");
+//         }
+//
+//     } catch (error) {
+//         console.error("로그인 에러: ", error);
+//
+//         if (error.response) {
+//             alert(error.response.data.error);
+//         }
+//         else {
+//             alert("로그인 요청 에러")
+//         }
+//     }
+// };

@@ -23,23 +23,20 @@ function SignIn() {
         }
         try {
             // 로그인 요청
-            const response = await axios.post("/api/sign-in", { email, password });
+            const response = await axios.post("/api/sign-in", { email, password }, { withCredentials: true });
             console.log("✅ 로그인 요청 성공");
 
-            const { accessToken, refreshToken } = response.data;
-
-            // 🔹 유틸 함수로 토큰 저장
-            setTokens(accessToken, refreshToken);
-
             // 🔹 유저 정보 가져와서 상태 업데이트
-            const user = getUserFromToken();
-            if (user) {
+            const userResponse = await axios.get("/api/user", { withCredentials: true });
+
+            const user = userResponse.data;
+            if(user) {
                 setState(user);
-                console.log("✅ 로그인한 유저 정보:", user);
-                alert("로그인 성공")
-                navigate("/"); // 🔹 로그인 성공 시 메인 페이지로 이동
+                console.log("저장된 유저 정보", user);
+                alert("로그인 성공");
+                navigate("/");
             } else {
-                alert("로그인 정보가 유효하지 않습니다.");
+                alert("성공하였으나 사용자 정보를 가져오지 못함")
             }
 
         } catch (error) {

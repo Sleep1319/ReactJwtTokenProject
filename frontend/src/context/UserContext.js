@@ -2,6 +2,7 @@ import React from "react";
 import {createContext, useContext, useState, useEffect} from "react";
 import {clearTokens, getUserFromToken} from "../utils/jwt";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 //세션관리 및 스테이트 이동
 const UserContext = createContext();
 
@@ -11,20 +12,31 @@ export function UserProvider({ children }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const user = getUserFromToken(); //
-        if (user) {
-            setState(user);
-        } else {
-            setState(null);//첫 접속시 토큰이 없기에 로그인 화연으로 이동
-            // logout(); // 토큰이 없거나 만료되었으면 로그아웃
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get("/api/user", { withCredentials: true });
+                setState(response.data);
+            } catch (error) {
+                console.log("사용자 정보 없거나 만료", error);
+                if (!state == null) {
+                    setState(null);
+                    navigate("")
+                }
+            }
         }
+            fetchUser();
     }, []);
 
-    const logout = () => {
-        clearTokens(); //
+    const logout = async () => {
+        try {
+            await axios.post("/api/logout", {}, { withCredentials: true });
+        } catch (error) {
+            console.error("로그아웃 요청 실패", error)
+        }
+
         setState(null);
         navigate("/sign-in");
-    };
+    }
 
 
     return (<UserContext.Provider value={{state, setState, logout}}>

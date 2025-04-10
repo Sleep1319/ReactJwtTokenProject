@@ -46,6 +46,20 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(NotLoginException.class)
+    public ResponseEntity<?> handleNotLoginException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error", "로그인 상태가 아닙니다.")
+        );
+    }
+
+    @ExceptionHandler(ForbiddenActionException.class)
+    public ResponseEntity<?> handleForbiddenActionException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error", "요청 권한이 없습니다.")
+        );
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGenericException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
