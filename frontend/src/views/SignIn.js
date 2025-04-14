@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import InputField from "../components/InputField";
+import FormWrapper from "../components/FormWrapper";
 import { setTokens, getUserFromToken } from "../utils/jwt.js";
 
 
@@ -53,21 +55,37 @@ function SignIn() {
 
     return (
     <main className="main">
-        <form id="signInForm" onSubmit={signIn}>
-            <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                <input type="email" className="form-control" id="exampleInputEmail1" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                <input type="password" className="form-control" id="exampleInputPassword1" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby="passwordHelp" />
-                <div id="passwordHelp" className="form-text">
-                알파벳, 숫자, 특수 기호를 쓰십시오
-                {/* 검증 미구현 */}
-                </div>
-            </div>
-            <button type="submit" className="btn btn-primary">로그인</button>
-        </form>
+        <FormWrapper>
+            <InputField
+                label="이메일"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                id="signinEmail"
+            />
+            <InputField
+                label="비밀번호"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                id="signinEmail"
+            />
+        </FormWrapper>
+        {/*<form id="signInForm" onSubmit={signIn}>*/}
+        {/*    <div className="mb-3">*/}
+        {/*        <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>*/}
+        {/*        <input type="email" className="form-control" id="exampleInputEmail1" value={email} onChange={(e) => setEmail(e.target.value)} />*/}
+        {/*    </div>*/}
+        {/*    <div className="mb-3">*/}
+        {/*        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>*/}
+        {/*        <input type="password" className="form-control" id="exampleInputPassword1" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby="passwordHelp" />*/}
+        {/*        <div id="passwordHelp" className="form-text">*/}
+        {/*        알파벳, 숫자, 특수 기호를 쓰십시오*/}
+        {/*        /!* 검증 미구현 *!/*/}
+        {/*        </div>*/}
+        {/*    </div>*/}
+        {/*    <button type="submit" className="btn btn-primary">로그인</button>*/}
+        {/*</form>*/}
         <Link to="/">메인으로 이동</Link> / <Link to="/sign-up">회원가입</Link>
     </main>
     );

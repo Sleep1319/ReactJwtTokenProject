@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import InputField from "../components/InputField";
+import FormWrapper from "../components/FormWrapper";
 
 function SignUp() {
     const [email, setEmail] = useState("");
@@ -51,26 +53,36 @@ function SignUp() {
 
     return (
         <main className="main">
-            <form id="signUpForm" onSubmit={signUp}>
-                <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">이메일</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">비밀번호</label>
-                    <input type="password" className="form-control" id="exampleInputPassword1" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleInputUsername" className="form-label">이름</label>
-                    <input type="text" className="form-control" id="exampleInputUsername" value={username} onChange={(e) => setUsername(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleInputNickname" className="form-label">닉네임</label>
-                    <input type="text" className="form-control" id="exampleInputNickname" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-                </div>
-                <button type="submit" className="btn btn-primary" >가입</button>
-                <button type="reset" className="btn btn-secondary">다시</button>
-            </form>
+            <FormWrapper onSubmit={signUp} onReset={resetForm} submitText="가입" resetText="다시">
+                <InputField
+                    label="이메일"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    id="signupEmail"
+                />
+                <InputField
+                    label="비밀번호"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    id="signupPassword"
+                />
+                <InputField
+                    label="이름"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    id="signupUsername"
+                />
+                <InputField
+                    label="닉네임"
+                    type="text"
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
+                    id="signupNickname"
+                />
+            </FormWrapper>
             <Link to="/">메인으로 이동</Link> / <Link to="/sign-in">로그인</Link>
         </main>
     );
