@@ -71,21 +71,6 @@ function SignIn() {
                 id="signinEmail"
             />
         </FormWrapper>
-        {/*<form id="signInForm" onSubmit={signIn}>*/}
-        {/*    <div className="mb-3">*/}
-        {/*        <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>*/}
-        {/*        <input type="email" className="form-control" id="exampleInputEmail1" value={email} onChange={(e) => setEmail(e.target.value)} />*/}
-        {/*    </div>*/}
-        {/*    <div className="mb-3">*/}
-        {/*        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>*/}
-        {/*        <input type="password" className="form-control" id="exampleInputPassword1" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby="passwordHelp" />*/}
-        {/*        <div id="passwordHelp" className="form-text">*/}
-        {/*        알파벳, 숫자, 특수 기호를 쓰십시오*/}
-        {/*        /!* 검증 미구현 *!/*/}
-        {/*        </div>*/}
-        {/*    </div>*/}
-        {/*    <button type="submit" className="btn btn-primary">로그인</button>*/}
-        {/*</form>*/}
         <Link to="/">메인으로 이동</Link> / <Link to="/sign-up">회원가입</Link>
     </main>
     );
