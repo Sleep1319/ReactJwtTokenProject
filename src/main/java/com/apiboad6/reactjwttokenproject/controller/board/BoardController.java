@@ -50,11 +50,7 @@ public class BoardController {
 
     @DeleteMapping("/api/board/{id}")
     public ResponseEntity<?> deleteBoard(@PathVariable int id) {
-
-
         boardService.deleteBoard(id);
-
-
         return ResponseEntity.ok().build();
     }
 

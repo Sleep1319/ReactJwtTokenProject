@@ -108,9 +108,9 @@ function Board() {
                     )}
                 </>
             )}
-            {(post && post.memberId && (Number(state?.memberId) === Number(post.memberId) || state.roleName === "ADMIN")) && (
-                <button className="btn btn-danger" onClick={deleteBoard}>글 삭제</button>
-            )}
+            {post && post.memberId && state && (Number(state.memberId) === Number(post.memberId) || state.roleName === "ADMIN") && (
+                    <button className="btn btn-danger" onClick={deleteBoard}>글 삭제</button>
+                )}
             <Link to="/">메인으로 돌아가기</Link>
         </main>
     );

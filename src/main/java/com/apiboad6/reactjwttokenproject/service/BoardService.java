@@ -54,7 +54,20 @@ public class BoardService {
 
     @Transactional
     public void updateBoard(int id, BoardUpdateRequest req) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null || !authentication.isAuthenticated()) {
+            throw new NotLoginException();
+        }
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        int loginMemberId = user.getId();
+        String role = user.getRoleName();
+
         Board board = boardRepository.findById(id).orElseThrow(NotFoundBoardException::new);
+
+        if (loginMemberId != board.getMember().getId()) {
+            throw new ForbiddenActionException();
+        }
         board.update(req.getTitle(), req.getContent());
     }
 
@@ -72,7 +85,7 @@ public class BoardService {
 
         Board board = boardRepository.findById(id).orElseThrow(NotFoundBoardException::new);
 
-        if (loginMemberId != board.getMember().getId() && !role.equals("ROLE_ADMIN")) {
+        if (loginMemberId != board.getMember().getId() && !role.equals("ADMIN")) {
             throw new ForbiddenActionException();
         }
 
