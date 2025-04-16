@@ -1,19 +1,20 @@
-import React, {forwardRef} from 'react';
+import React, { forwardRef } from "react";
 
-const InputField = forwardRef(({ label, type, value, onChange, id }, ref) => {
+const TextareaField = forwardRef(({ label, id, value, onChange, readOnly = false, rows = 5 }, ref) => {
     return (
         <div className="mb-3">
             <label htmlFor={id} className="form-label">{label}</label>
-            <input
-                type={type}
+            <textarea
                 className="form-control"
                 id={id}
+                rows={rows}
                 value={value}
                 onChange={onChange}
+                readOnly={readOnly}
                 ref={ref}
             />
         </div>
-    );
+    )
 });
 
-export default InputField
+export default TextareaField;

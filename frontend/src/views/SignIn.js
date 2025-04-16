@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import FormWrapper from "../components/FormWrapper";
+import ActionButton from "../components/ActionButton";
 import { setTokens, getUserFromToken } from "../utils/jwt.js";
 
 
@@ -70,6 +71,7 @@ function SignIn() {
                 onChange={(e) => setPassword(e.target.value)}
                 id="signinEmail"
             />
+            <ActionButton type={"button"} className={'btn btn-primary'} onClick={signIn}>로그인</ActionButton>
         </FormWrapper>
         <Link to="/">메인으로 이동</Link> / <Link to="/sign-up">회원가입</Link>
     </main>

@@ -3,6 +3,10 @@ import React, {useRef} from "react";
 import { Link, useNavigate } from "react-router-dom"; 
 import { useUser } from "../context/UserContext";
 import {getAccessToken} from "../utils/jwt";
+import InputField from "../components/InputField";
+import FormWrapper from "../components/FormWrapper";
+import TextareaField from "../components/TextareaField";
+import ActionButton from "../components/ActionButton";
 
 function WriteBoard() {
     const { state } = useUser();
@@ -48,23 +52,25 @@ function WriteBoard() {
             }
         }
 
-    };
+    }
 
-
-    
     return (
         <main className="main">
-            <form id="writeForm" onSubmit={writeBoard}>
-                <div className="mb-3">
-                    <label htmlFor="exampleFormControlInput1" className="form-label">제목</label>
-                    <input type="text" className="form-control" id="exampleFormControlInput1" ref={title}/>
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleFormControlTextarea1" className="form-label">내용</label>
-                    <textarea className="form-control" id="exampleFormControlTextarea1" ref={content} rows="20" maxLength={333} placeholder="333자 까지"></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary" >등록</button>
-            </form>
+            <FormWrapper>
+                <InputField
+                    label="제목"
+                    type="text"
+                    id="title"
+                    ref={title}
+                />
+                <TextareaField
+                    label="내용"
+                    type="text"
+                    id="content"
+                    ref={content}
+                />
+                <ActionButton type={"button"} className={"btn btn-primary"} onClick={writeBoard}>글쓰기</ActionButton>
+            </FormWrapper>
             <Link to="/">메인으로 돌아가기</Link>
         </main>
     );

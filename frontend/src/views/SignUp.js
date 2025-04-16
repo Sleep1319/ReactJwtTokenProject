@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import InputField from "../components/InputField";
 import FormWrapper from "../components/FormWrapper";
+import ActionButton from "../components/ActionButton";
 
 function SignUp() {
     const [email, setEmail] = useState("");
@@ -53,7 +54,7 @@ function SignUp() {
 
     return (
         <main className="main">
-            <FormWrapper onSubmit={signUp} onReset={resetForm} submitText="가입" resetText="다시">
+            <FormWrapper>
                 <InputField
                     label="이메일"
                     type="email"
@@ -82,6 +83,7 @@ function SignUp() {
                     onChange={(e) => setNickname(e.target.value)}
                     id="signupNickname"
                 />
+                <ActionButton type={"button"} className={'btn btn-primary'} onClick={signUp}>가입</ActionButton>
             </FormWrapper>
             <Link to="/">메인으로 이동</Link> / <Link to="/sign-in">로그인</Link>
         </main>

@@ -1,11 +1,9 @@
 import React from 'react';
 
-export default function FormWrapper({ onSubmit, children, onReset, submitText = "제출", resetText = "초기화" }) {
+export default function FormWrapper({ children }) {
     return (
-        <form onSubmit={onSubmit}>
+        <form>
             {children}
-            <button type="submit" className="btn btn-primary">{submitText}</button>
-            {onReset && <button type="button" className="btn btn-secondary" onClick={onReset}>{resetText}</button>}
         </form>
     );
 }

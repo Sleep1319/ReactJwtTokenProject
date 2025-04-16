@@ -3,6 +3,10 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import InputField from "../components/InputField";
+import FormWrapper from "../components/FormWrapper";
+import TextareaField from "../components/TextareaField";
+import ActionButton from "../components/ActionButton";
 
 //"" 값 설정이유 언디파인 대용 콘솔창 에러로그들..
 function Board() {
@@ -80,30 +84,40 @@ function Board() {
     
     return (
         <main className="main">
-            <form className="boardForm">
-                <span className="d-flex gap-3">
-                    <div className="mb-3" style={{ width: "45%" }}>
-                        <label htmlFor="exampleFormControlInput1" className="form-label">제목</label>
-                        <input type="text" className="form-control" id="exampleFormControlInput1" value={post.title || ""} readOnly/>
-                    </div>
-                    <div className="mb-3" style={{ width: "45%" }}>
-                        <label htmlFor="exampleFormControlInput2" className="form-label">작성자</label>
-                        <input type="text" className="form-control" id="exampleFormControlInput2" value={post.nickname || ""} readOnly/>
-                    </div>
-                </span>
-                <div className="mb-3">
-                    <label htmlFor="exampleFormControlTextarea1" className="form-label">내용</label>
-                    <textarea className="form-control" id="content" rows="20" value={editedContent} readOnly={isReadOnly} onChange={(e) => setEditedContent(e.target.value)}></textarea>
+            <FormWrapper>
+                <div className="d-flex gap-3">
+                    <InputField
+                        label="제목"
+                        type="text"
+                        id="title"
+                        value={post.title}
+                        onChange={() => {}}
+                    />
+                    <InputField
+                        label="작성자"
+                        type="text"
+                        id="nickname"
+                        value={post.nickname}
+                        onChange={() => {}}
+                    />
                 </div>
-            </form>
+                <TextareaField
+                    label="내용"
+                    id="content"
+                    rows={20}
+                    value={editedContent}
+                    onChange={(e) => setEditedContent(e.target.value)}
+                    readOnly={isReadOnly}
+                />
+            </FormWrapper>
             {post && post.memberId && Number(state?.memberId) === Number(post.memberId) && (
                 <>
                     {isReadOnly ? (
-                        <button className="btn btn-warning" onClick={() => setIsReadOnly(false)}>수정하기</button>
+                            <ActionButton type={"button"} className={"btn btn-warning"} onClick={() => setIsReadOnly(false)}>로그인</ActionButton>
                     ) : (
                         <>
-                            <button className="btn btn-success" onClick={updateBoard}>확인</button>
-                            <button className="btn btn-warning" onClick={handleCancel}>취소</button>
+                            <ActionButton type={"button"} className={"btn btn-success"} onClick={updateBoard}>확인</ActionButton>
+                            <ActionButton type={"button"} className={"btn btn-warning"} onClick={handleCancel}>취소</ActionButton>
                         </>
                     )}
                 </>
