@@ -4,6 +4,7 @@ import axios from "axios";
 import InputField from "../components/InputField";
 import FormWrapper from "../components/FormWrapper";
 import ActionButton from "../components/ActionButton";
+import {Box, Button, TextField, Typography} from "@mui/material";
 
 function SignUp() {
     const [email, setEmail] = useState("");
@@ -51,41 +52,48 @@ function SignUp() {
         setUsername("");
         setNickname("");
     };
-
+    //온서브밋 = 버튼 타입 서브밋 온서브밋x = 버튼에 온클릭
     return (
-        <main className="main">
-            <FormWrapper>
-                <InputField
+        <main className="main" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '2rem' }}>
+            <Typography variant="h5" gutterBottom>회원가입</Typography>
+
+            <Box component="form" onSubmit={signUp} noValidate sx={{ width: '100%', maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <TextField
                     label="이메일"
                     type="email"
+                    fullWidth
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    id="signupEmail"
                 />
-                <InputField
+                <TextField
                     label="비밀번호"
                     type="password"
+                    fullWidth
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    id="signupPassword"
                 />
-                <InputField
+                <TextField
                     label="이름"
                     type="text"
+                    fullWidth
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    id="signupUsername"
                 />
-                <InputField
+                <TextField
                     label="닉네임"
                     type="text"
+                    fullWidth
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
-                    id="signupNickname"
                 />
-                <ActionButton type={"button"} className={'btn btn-primary'} onClick={signUp}>가입</ActionButton>
-            </FormWrapper>
-            <Link to="/">메인으로 이동</Link> / <Link to="/sign-in">로그인</Link>
+                <Button variant="contained" type="submit" color="primary" fullWidth>
+                    회원가입
+                </Button>
+            </Box>
+
+            <Box sx={{ marginTop: 2 }}>
+                <Link to="/">메인으로 이동</Link> / <Link to="/sign-up">회원가입</Link>
+            </Box>
         </main>
     );
 }

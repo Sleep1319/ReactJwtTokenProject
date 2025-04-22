@@ -19,6 +19,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 매 요청시마다 쿠키에서 토큰 꺼내서 인증
+    /**
+     *
+     StringUtils.hasText(token): null/빈문자 체크
+     jwtTokenProvider.validateToken(token): 토큰 유효성 검사 (서명, 만료 등)
+     getAuthentication(token): 토큰에서 유저 정보를 꺼내서 Authentication 객체 생성
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(req);
@@ -27,12 +33,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
-
+        //필터로 넘기기
+        //이걸 호출해야 다음 필터 or DispatcherServlet까지 넘어감
         filterChain.doFilter(req, res);
     }
 
     private String resolveToken(HttpServletRequest req) {
+        //헤더 우선 찾기
         String bearerToken = req.getHeader("Authorization");
+        //Bearer <토큰> 형식이면 "Bearer " 떼고 순수 토큰만 추출
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
@@ -48,3 +57,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 }
+/**
+    [요청 들어옴]
+      ↓
+[JwtAuthenticationFilter 실행]
+      ↓
+토큰 꺼내기 (Header or Cookie)
+      ↓
+토큰 유효성 검사
+      ↓
+유저 정보 추출 (getAuthentication)
+      ↓
+SecurityContextHolder 에 저장
+      ↓
+다음 필터로 넘기기
+위 필터가 인증을 대신 하기에
+컨트롤러에서는 간단히 @AuthenticationPrincipal 이나 SecurityContextHolder로 로그인 유저 정보 가져올 수 있다
+*/

@@ -181,5 +181,46 @@ public class JwtTokenProvider {
                 .build();
     }
 
-
 }
+/**
+Authentication
+Spring Security에서 인증된 사용자 정보를 담는 중앙 객체
+이 객체는 로그인된 유저의 정보, 권한, 인증 상태 등을 가지고 있음.
+언제든지 현재 로그인된 유저 정보를 확인하려면 이걸 꺼내서 쓰면 됨.
+Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+사용자 로그인 → JWT 토큰 검증 → 유저 정보 조회 → Authentication 객체 생성 → SecurityContext에 저장
+
+사용자 로그인: 사용자가 로그인하면 (혹은 JWT 토큰을 가지고 요청하면),
+Jwt 토큰 검증: JwtAuthenticationFilter 같은 인증 필터가 토큰을 검증하고,
+유저 정보 조회: 토큰 안의 정보를 바탕으로 DB에서 유저 정보(UserDetails)를 가져와,
+객체 생성: Authentication 구현체 (UsernamePasswordAuthenticationToken)을 생성해서,
+저장: 이걸 SecurityContextHolder에 저장함.
+SecurityContextHolder.getContext().setAuthentication(authentication);
+이렇게 저장된 인증 정보는 모든 요청에서 공유
+
+커스텀 유저 디테일이 가느한 이유
+return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+구문으로 principal로 들어감
+ */
+
+/**
+getAuthentication(token)
+    ↓
+1. getEmailFromToken(token)
+   → 토큰의 Payload(Body)에서 subject(이메일) 꺼냄
+    ↓
+2. userDetailsService.loadUserByUsername(email)
+   → 이메일 기준으로 DB에서 유저 정보 꺼냄
+    ↓
+3. new UsernamePasswordAuthenticationToken(...)
+   → 인증된 Authentication 객체 생성 (Spring Security에서 로그인 성공 처리한 상태)
+
+   [JWT 필터] → 토큰 꺼냄
+          → 유효성 확인
+          → JwtTokenProvider.getAuthentication(token) 호출
+             → getEmailFromToken(token)
+             → loadUserByUsername(email)
+             → UsernamePasswordAuthenticationToken 반환
+          → SecurityContextHolder 에 등록
+   */

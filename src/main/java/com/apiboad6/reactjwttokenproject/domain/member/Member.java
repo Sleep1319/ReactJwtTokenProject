@@ -42,7 +42,7 @@ public class Member {
     @JoinColumn(name = "roles_id", referencedColumnName = "id")
     private Roles roles;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Board> board;
 
     public Member(String email, String password, String username, String nickname, Roles roles) {

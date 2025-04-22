@@ -49,8 +49,12 @@ function Board() {
             setIsReadOnly(true);
             alert("수정 완료");
         } catch (error) {
-            console.error("수정 실패", error.response)
-            alert("수정 실패");
+            if (error.response) {
+                alert(error.response.data.error);
+            } else {
+                console.error("수정 실패", error.response)
+                alert("수정 실패");
+            }
         }
     };
 
@@ -62,8 +66,12 @@ function Board() {
             alert("삭제 완료")
             navigate("/");
         } catch (error) {
-            console.error("삭제 실패", error);
-            alert("삭제실패");
+            if (error.response) {
+                alert(error.response.data.error);
+            } else {
+                console.error("삭제 실패", error);
+                alert("삭제실패");
+            }
         }
     }
 
@@ -113,7 +121,7 @@ function Board() {
             {post && post.memberId && Number(state?.memberId) === Number(post.memberId) && (
                 <>
                     {isReadOnly ? (
-                            <ActionButton type={"button"} className={"btn btn-warning"} onClick={() => setIsReadOnly(false)}>로그인</ActionButton>
+                            <ActionButton type={"button"} className={"btn btn-warning"} onClick={() => setIsReadOnly(false)}>수정하기</ActionButton>
                     ) : (
                         <>
                             <ActionButton type={"button"} className={"btn btn-success"} onClick={updateBoard}>확인</ActionButton>
@@ -125,6 +133,7 @@ function Board() {
             {post && post.memberId && state && (Number(state.memberId) === Number(post.memberId) || state.roleName === "ADMIN") && (
                     <button className="btn btn-danger" onClick={deleteBoard}>글 삭제</button>
                 )}
+            {/*<button className="btn btn-danger" onClick={deleteBoard}>권한 없는 삭제 테스트</button>*/}
             <Link to="/">메인으로 돌아가기</Link>
         </main>
     );

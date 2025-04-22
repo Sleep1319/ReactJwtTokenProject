@@ -61,7 +61,7 @@ public class BoardService {
         }
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         int loginMemberId = user.getId();
-        String role = user.getRoleName();
+//        String role = user.getRoleName();
 
         Board board = boardRepository.findById(id).orElseThrow(NotFoundBoardException::new);
 

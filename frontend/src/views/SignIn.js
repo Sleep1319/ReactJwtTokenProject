@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import FormWrapper from "../components/FormWrapper";
 import ActionButton from "../components/ActionButton";
-import { setTokens, getUserFromToken } from "../utils/jwt.js";
+import {Box, Button, TextField, Typography} from "@mui/material";
 
 
 
@@ -55,26 +55,33 @@ function SignIn() {
     };
 
     return (
-    <main className="main">
-        <FormWrapper>
-            <InputField
-                label="이메일"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                id="signinEmail"
-            />
-            <InputField
-                label="비밀번호"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                id="signinEmail"
-            />
-            <ActionButton type={"button"} className={'btn btn-primary'} onClick={signIn}>로그인</ActionButton>
-        </FormWrapper>
-        <Link to="/">메인으로 이동</Link> / <Link to="/sign-up">회원가입</Link>
-    </main>
+        <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '2rem' }}>
+            <Typography variant="h5" gutterBottom>로그인</Typography>
+
+            <Box component="form" noValidate sx={{ width: '100%', maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <TextField
+                    label="이메일"
+                    type="email"
+                    fullWidth
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                    label="비밀번호"
+                    type="password"
+                    fullWidth
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button variant="contained" type="button" color="primary" onClick={signIn} fullWidth>
+                    로그인
+                </Button>
+            </Box>
+
+            <Box sx={{ marginTop: 2 }}>
+                <Link to="/">메인으로 이동</Link> / <Link to="/sign-up">회원가입</Link>
+            </Box>
+        </main>
     );
 }
 

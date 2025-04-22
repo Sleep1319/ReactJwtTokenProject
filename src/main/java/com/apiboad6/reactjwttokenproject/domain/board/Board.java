@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table
 @NoArgsConstructor
 @Getter //리포지토리에서 이용하기 위함 서비스나 리포지토리에서 엔티티 이용은 외부 노출이 아니기에 가능
-public class Board {
+public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Board {
     @NotNull
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
