@@ -3,6 +3,7 @@ import React, {useRef} from "react";
 import { Link, useNavigate } from "react-router-dom"; 
 import { useUser } from "../context/UserContext";
 import {getAccessToken} from "../utils/jwt";
+import { Box, Button, TextField } from "@mui/material";
 import InputField from "../components/InputField";
 import FormWrapper from "../components/FormWrapper";
 import TextareaField from "../components/TextareaField";
@@ -56,22 +57,26 @@ function WriteBoard() {
 
     return (
         <main className="main">
-            <FormWrapper>
-                <InputField
+            <Box component="form" noValidate>
+                <TextField
                     label="제목"
                     type="text"
-                    id="title"
-                    ref={title}
+                    inputRef={title}
                 />
-                <TextareaField
+                <TextField
                     label="내용"
-                    type="text"
-                    id="content"
-                    ref={content}
+                    multiline
+                    row={20}
+                    fullWidth
+                    inputRef={content}
                 />
-                <ActionButton type={"button"} className={"btn btn-primary"} onClick={writeBoard}>글쓰기</ActionButton>
-            </FormWrapper>
-            <Link to="/">메인으로 돌아가기</Link>
+                <Button type="button" className="btn btn-warning" color="primary" onClick={writeBoard}>
+                    글쓰기
+                </Button>
+            </Box>
+            <Box sx={{ marginTop: 2 }}>
+                <Link to="/">메인으로 돌아가기</Link>
+            </Box>
         </main>
     );
 }
