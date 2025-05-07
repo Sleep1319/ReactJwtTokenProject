@@ -9,6 +9,7 @@ import com.apiboad6.reactjwttokenproject.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,8 +26,16 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/api/boards")
-    public ResponseEntity<?> getAllBoard() {
-        List<BoardResponse> res = boardService.findBoard();
+    public ResponseEntity<?> getAllBoard(@RequestParam(defaultValue = "0") int page) {
+        Page<BoardResponse> res = boardService.findBoard(page);
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/api/board/search")
+    public ResponseEntity<?> searchBoard(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(required = false) String title,
+                                         @RequestParam(required = false) String nickname) {
+        Page<BoardResponse> res = boardService.searchBoard(title, nickname, page);
         return ResponseEntity.ok(res);
     }
 

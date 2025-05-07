@@ -10,8 +10,10 @@ import com.apiboad6.reactjwttokenproject.exception.ForbiddenActionException;
 import com.apiboad6.reactjwttokenproject.exception.NotFoundBoardException;
 import com.apiboad6.reactjwttokenproject.exception.NotLoginException;
 import com.apiboad6.reactjwttokenproject.repository.BoardRepository;
+import com.apiboad6.reactjwttokenproject.repository.BoardRepositoryCustom;
 import com.apiboad6.reactjwttokenproject.repository.SignRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,19 +28,61 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final BoardRepositoryCustom boardRepositoryCustom;
     private final SignRepository signRepository;
 
-    public List<BoardResponse> findBoard () {
-        List<Board> boardList = boardRepository.findAll();
-        return boardList.stream()
+    public Page<BoardResponse> findBoard(int page) {
+
+        PageRequest pageable = PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Board> boards = boardRepository.findAll(pageable);
+
+        //진짜 설정한 개수만 나올까?
+        System.out.println("페이지 번호: " + page);
+        System.out.println("총 게시글 수: " + boards.getTotalElements());
+        System.out.println("전체 페이지 수: " + boards.getTotalPages());
+        System.out.println("현재 페이지의 게시글 수: " + boards.getContent().size());
+
+        List<BoardResponse> boardResponseList = boards.stream()
                 .map(board -> new BoardResponse(
                         board.getId(),
                         board.getTitle(),
                         board.getContent(),
                         board.getMember().getId(),
-                        board.getMember().getNickname() // 관계에서 닉네임 가져오기
+                        board.getMember().getNickname()
                 ))
-                .collect(Collectors.toList());
+                .toList();
+        return new PageImpl<>(boardResponseList, pageable, boards.getTotalElements());
+//        List<Board> boardList = boardRepository.findAll();
+//        return boardList.stream()
+//                .map(board -> new BoardResponse(
+//                        board.getId(),
+//                        board.getTitle(),
+//                        board.getContent(),
+//                        board.getMember().getId(),
+//                        board.getMember().getNickname() // 관계에서 닉네임 가져오기
+//                ))
+//                .collect(Collectors.toList());
+    }
+
+    public Page<BoardResponse> searchBoard(String title, String nickname, int page) {
+        Pageable pageable = PageRequest.of(page, 10);  // 한 페이지에 10개씩 보이도록 설정
+        Page<Board> boards = boardRepositoryCustom.search(title, nickname, pageable);
+
+        System.out.println("페이지 번호: " + page);
+        System.out.println("총 게시글 수: " + boards.getTotalElements());
+        System.out.println("전체 페이지 수: " + boards.getTotalPages());
+        System.out.println("현재 페이지의 게시글 수: " + boards.getContent().size());
+
+        List<BoardResponse> boardResponseList = boards.stream()
+                .map(board -> new BoardResponse(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getContent(),
+                        board.getMember().getId(),
+                        board.getMember().getNickname()
+                ))
+                .toList();
+        return new PageImpl<>(boardResponseList, pageable, boards.getTotalElements());
     }
 
     public BoardResponse findByBoardWithMemberId(int id) {
