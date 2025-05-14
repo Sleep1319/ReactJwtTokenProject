@@ -1,6 +1,7 @@
 package com.apiboad6.reactjwttokenproject.config;
 
 import com.apiboad6.reactjwttokenproject.config.jwt.JwtAuthenticationFilter;
+import com.apiboad6.reactjwttokenproject.config.oauth2.CustomOAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,9 +44,13 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/board/**")
                         .permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll() // 그 외의 모든 요청은 인증 해제 (테스트용)
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .oauth2Login(oauth -> oauth
+                        .successHandler(customOAuth2SuccessHandler)
+                );
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -54,6 +54,10 @@ function SignIn() {
         }
     };
 
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:8084/oauth2/authorization/google";
+    };
+
     return (
         <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '2rem' }}>
             <Typography variant="h5" gutterBottom>로그인</Typography>
@@ -81,6 +85,10 @@ function SignIn() {
             <Box sx={{ marginTop: 2 }}>
                 <Link to="/">메인으로 이동</Link> / <Link to="/sign-up">회원가입</Link>
             </Box>
+            <Box sx={{ marginTop: 2 }}>
+                <button onClick={handleGoogleLogin}>구글 로그인</button>
+            </Box>
+
         </main>
     );
 }

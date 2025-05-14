@@ -1,11 +1,9 @@
 package com.apiboad6.reactjwttokenproject.service;
 
 import com.apiboad6.reactjwttokenproject.config.jwt.JwtTokenProvider;
+import com.apiboad6.reactjwttokenproject.domain.member.Member;
 import com.apiboad6.reactjwttokenproject.domain.member.Roles;
-import com.apiboad6.reactjwttokenproject.dto.sign.SignInQueryResult;
-import com.apiboad6.reactjwttokenproject.dto.sign.SignInRequest;
-import com.apiboad6.reactjwttokenproject.dto.sign.SignInResponse;
-import com.apiboad6.reactjwttokenproject.dto.sign.SignUpRequest;
+import com.apiboad6.reactjwttokenproject.dto.sign.*;
 import com.apiboad6.reactjwttokenproject.exception.MemberEmailAlreadyExistsException;
 import com.apiboad6.reactjwttokenproject.exception.MemberNicknameAlreadyExistsException;
 import com.apiboad6.reactjwttokenproject.exception.NotFoundRoleIdException;
@@ -54,10 +52,25 @@ public class SignService {
 
     @Transactional
     public void signUp(SignUpRequest req) {
-        validateSignUp(req);
+        validateSignUp(req.getEmail(), req.getNickname());
         req.setPassword(passwordEncoder.encode(req.getPassword()));
         Roles roles = roleRepository.findById(2).orElseThrow(NotFoundRoleIdException::new);
         signRepository.save(SignUpRequest.toEntity(req, roles));
+    }
+
+    @Transactional
+    public void socialSignUp(SocialSignUpRequest req) {
+        validateSignUp(req.getEmail(), req.getNickname());
+        Roles roles = roleRepository.findById(2).orElseThrow(NotFoundRoleIdException::new);
+        Member member = new Member(
+                req.getEmail(),
+                "", // 소셜 로그인은 비밀번호 없음
+                req.getUsername(),
+                req.getNickname(),
+                roles
+        );
+        member.setSocialProvider(req.getProvider(), req.getProviderId());
+        signRepository.save(member);
     }
 
     //비밀번호 검증
@@ -67,14 +80,12 @@ public class SignService {
         }
     }
 
-    private void validateSignUp(SignUpRequest req) {
-        if(signRepository.existsByEmail(req.getEmail())) {
+    private void validateSignUp(String email, String nickname) {
+        if(signRepository.existsByEmail(email)) {
             throw new MemberEmailAlreadyExistsException();
         }
-        if(signRepository.existsByNickname(req.getNickname())) {
+        if(signRepository.existsByNickname(nickname)) {
             throw new MemberNicknameAlreadyExistsException();
         }
     }
-
-
 }

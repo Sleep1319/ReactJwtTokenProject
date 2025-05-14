@@ -27,7 +27,6 @@ public class Member {
     private String email;
 
     @Column(name = "password")
-    @NotNull
     private String password;
 
     @Column(name = "username")
@@ -37,6 +36,12 @@ public class Member {
     @Column(name = "nickname", unique = true)
     @NotNull
     private String nickname;
+
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "provider_id")
+    private String providerId;
 
     @ManyToOne
     @JoinColumn(name = "roles_id", referencedColumnName = "id")
@@ -51,5 +56,10 @@ public class Member {
         this.username = username;
         this.nickname = nickname;
         this.roles = roles;
+    }
+
+    public void setSocialProvider(String provider, String providerId) {
+        this.provider = provider;
+        this.providerId = providerId;
     }
 }

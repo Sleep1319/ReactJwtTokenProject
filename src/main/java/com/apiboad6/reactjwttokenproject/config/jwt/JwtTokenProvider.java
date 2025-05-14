@@ -4,6 +4,7 @@ import com.apiboad6.reactjwttokenproject.dto.sign.UserInfoResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,6 +87,16 @@ public class JwtTokenProvider {
                 .signWith(getSignInKey())
                 .compact();
     }
+
+    //소셜용 임시토큰
+//    public String createTempToken(String email) {
+//        return Jwts.builder()
+//                .subject(email)
+//                .issuedAt(new Date())
+//                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
+//                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), Jwts.SIG.HS256)
+//                .compact();
+//    }
 
 
     //인증을 위한 고유 유저 정보

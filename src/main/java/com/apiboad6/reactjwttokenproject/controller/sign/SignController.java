@@ -1,10 +1,7 @@
 package com.apiboad6.reactjwttokenproject.controller.sign;
 
 import com.apiboad6.reactjwttokenproject.config.jwt.JwtTokenProvider;
-import com.apiboad6.reactjwttokenproject.dto.sign.SignInRequest;
-import com.apiboad6.reactjwttokenproject.dto.sign.SignInResponse;
-import com.apiboad6.reactjwttokenproject.dto.sign.SignUpRequest;
-import com.apiboad6.reactjwttokenproject.dto.sign.UserInfoResponse;
+import com.apiboad6.reactjwttokenproject.dto.sign.*;
 import com.apiboad6.reactjwttokenproject.service.SignService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,6 +39,12 @@ public class SignController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest req) {
         signService.signUp(req);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/api/social-sign-up")
+    public ResponseEntity<?> socialSignUp(@RequestBody SocialSignUpRequest req) {
+        signService.socialSignUp(req);
         return ResponseEntity.ok().build();
     }
 

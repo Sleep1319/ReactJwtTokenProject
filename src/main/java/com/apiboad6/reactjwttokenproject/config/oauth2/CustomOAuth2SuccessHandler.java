@@ -1,0 +1,90 @@
+package com.apiboad6.reactjwttokenproject.config.oauth2;
+
+import com.apiboad6.reactjwttokenproject.config.jwt.JwtTokenProvider;
+import com.apiboad6.reactjwttokenproject.domain.member.Member;
+import com.apiboad6.reactjwttokenproject.domain.member.Roles;
+import com.apiboad6.reactjwttokenproject.repository.RoleRepository;
+import com.apiboad6.reactjwttokenproject.repository.SignRepository;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
+@Component
+@RequiredArgsConstructor
+public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
+
+    private final SignRepository signRepository;
+    private final RoleRepository roleRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+
+        OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+        OAuth2User oauthUser = oauthToken.getPrincipal();
+
+        // 사용자 정보 추출
+        String email = oauthUser.getAttribute("email");
+        String name = oauthUser.getAttribute("name");
+        String provider = oauthToken.getAuthorizedClientRegistrationId(); // 예: "google"
+        String providerId = oauthUser.getName(); // 구글 고유 ID
+
+        // 회원 존재 여부 확인
+        Optional<Member> existing = signRepository.findByEmail(email);
+
+        if (existing.isPresent()) {
+            Member member = existing.get();
+
+            if (member.getProvider() == null) {
+                // 일반 회원이 같은 이메일로 이미 존재하는 경우 → 로그인 차단
+                response.sendRedirect("http://localhost:3000/error?reason=email-already-registered");
+                return;
+            }
+
+            if (!member.getProvider().equals(provider)) {
+                // 다른 소셜 로그인으로 가입된 경우
+                response.sendRedirect("http://localhost:3000/error?reason=provider-mismatch");
+                return;
+            }
+
+            // 같은 소셜 로그인 사용자 → 로그인 처리
+            String accessToken = jwtTokenProvider.createAccessToken(
+                    member.getEmail(),
+                    member.getId(),
+                    member.getUsername(),
+                    member.getNickname(),
+                    member.getRoles().getRoleName()
+            );
+
+            ResponseCookie cookie = jwtTokenProvider.createHttpOnlyCookie(accessToken);
+            response.addHeader("Set-Cookie", cookie.toString());
+
+            response.sendRedirect("http://localhost:3000/oauth-success");
+        } else {
+            // 소셜 신규 가입 → 닉네임 입력 페이지로 이동
+            String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
+            String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
+            String encodedProvider = URLEncoder.encode(provider, StandardCharsets.UTF_8);
+            String encodedProviderId = URLEncoder.encode(providerId, StandardCharsets.UTF_8);
+
+            response.sendRedirect("http://localhost:3000/social-sign-up?email=" + encodedEmail
+                    + "&name=" + encodedName
+                    + "&provider=" + encodedProvider
+                    + "&providerId=" + encodedProviderId);
+        }
+    }
+}

@@ -27,7 +27,6 @@ function SignUp() {
                 username,
                 nickname
             });
-
             alert("회원가입 성공");
             window.location.href="/sign-in";
         } catch (error) {
@@ -42,9 +41,6 @@ function SignUp() {
             resetForm();
         }
     };
-
-
-
 
     const resetForm = () => {
         setEmail("");

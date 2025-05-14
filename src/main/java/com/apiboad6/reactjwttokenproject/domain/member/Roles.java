@@ -1,6 +1,7 @@
 package com.apiboad6.reactjwttokenproject.domain.member;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -15,9 +16,12 @@ public class Roles {
     @Column(name = "id")
     private int id;
 
+    @Getter
     @Column(name = "role_name")
     private String roleName;
 
+
     @OneToMany(mappedBy = "roles")
     private List<Member> members;
+
 }
