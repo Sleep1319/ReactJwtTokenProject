@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Button, TextField, Typography } from "@mui/material";
@@ -12,8 +12,15 @@ function SocialSignUp() {
     const name = query.get("name");
     const provider = query.get("provider");
     const providerId = query.get("providerId");
+    const reason = query.get("reason");
 
     const [nickname, setNickname] = useState("");
+
+    useEffect(() => {
+        if (reason === "not-registered") {
+            alert("등록되지 않은 회원입니다. 닉네임을 입력하여 회원가입을 완료해주세요.");
+        }
+    }, [reason]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +31,7 @@ function SocialSignUp() {
         }
 
         try {
-            await axios.post("/api/social-signup", {
+            await axios.post("/api/social-sign-up", {
                 email,
                 username: name, // 구글 이름 그대로 사용
                 nickname,
@@ -32,8 +39,8 @@ function SocialSignUp() {
                 providerId
             });
 
-            // 회원가입 성공 시 로그인 완료된 상태로 이동
-            navigate("/oauth-success");
+            // 회원가입 성공 시 다시 로그인 이동
+            window.location.href = "http://localhost:8084/oauth2/authorization/google"
 
         } catch (error) {
             console.error("소셜 회원가입 실패", error);

@@ -73,7 +73,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             ResponseCookie cookie = jwtTokenProvider.createHttpOnlyCookie(accessToken);
             response.addHeader("Set-Cookie", cookie.toString());
 
-            response.sendRedirect("http://localhost:3000/oauth-success");
+            response.sendRedirect("http://localhost:3000/");
         } else {
             // 소셜 신규 가입 → 닉네임 입력 페이지로 이동
             String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
@@ -84,7 +84,8 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             response.sendRedirect("http://localhost:3000/social-sign-up?email=" + encodedEmail
                     + "&name=" + encodedName
                     + "&provider=" + encodedProvider
-                    + "&providerId=" + encodedProviderId);
+                    + "&providerId=" + encodedProviderId
+                    + "&reason=not-registered");
         }
     }
 }
