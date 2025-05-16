@@ -15,10 +15,13 @@ function SocialSignUp() {
     const reason = query.get("reason");
 
     const [nickname, setNickname] = useState("");
-
+    console.log("reason: " + reason);
     useEffect(() => {
         if (reason === "not-registered") {
             alert("등록되지 않은 회원입니다. 닉네임을 입력하여 회원가입을 완료해주세요.");
+        }
+        if (reason === "new-user") {
+            alert("사용할 닉네임을 입력해주세요");
         }
     }, [reason]);
 
@@ -38,14 +41,15 @@ function SocialSignUp() {
                 provider,
                 providerId
             });
-
-            // 회원가입 성공 시 다시 로그인 이동
+            alert("회원가입 완료")
+            // 회원가입 성공 시 다시 로그인 이동(자동으로 로그인이 된다)
             window.location.href = "http://localhost:8084/oauth2/authorization/google"
 
         } catch (error) {
             console.error("소셜 회원가입 실패", error);
             if (error.response?.data) {
-                alert(error.response.data.message || "회원가입 실패");
+                console.log(error.response.data)
+                alert(error.response.data.error || "회원가입 실패");
             } else {
                 alert("회원가입 요청 실패");
             }

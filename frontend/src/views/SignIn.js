@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useUser } from "../context/UserContext";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import FormWrapper from "../components/FormWrapper";
@@ -16,7 +16,18 @@ function SignIn() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    const location = useLocation();
+    const query = new URLSearchParams(location.search);
+    const reason = query.get("reason");
 
+    useEffect(() => {
+        if (reason === "email-already-registered") {
+            alert("이미 가입된 이메일 입니다. 일반 로그인으로 진행해주세요");
+        }
+        if (reason === "provider-mismatch") {
+            alert("다른 소셜 계정으로 가입된 이메일입니다.");
+        }
+    }, [reason]);
 
     const signIn = async (e) => {
         e.preventDefault();

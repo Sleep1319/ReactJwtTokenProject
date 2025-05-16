@@ -34,6 +34,9 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
+        //로그인 시도/ 회원가입 시도 구분
+        String mode = request.getParameter("mode");
+
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauthUser = oauthToken.getPrincipal();
 
@@ -51,13 +54,13 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
             if (member.getProvider() == null) {
                 // 일반 회원이 같은 이메일로 이미 존재하는 경우 → 로그인 차단
-                response.sendRedirect("http://localhost:3000/error?reason=email-already-registered");
+                response.sendRedirect("http://localhost:3000/sign-in?reason=email-already-registered");
                 return;
             }
 
             if (!member.getProvider().equals(provider)) {
                 // 다른 소셜 로그인으로 가입된 경우
-                response.sendRedirect("http://localhost:3000/error?reason=provider-mismatch");
+                response.sendRedirect("http://localhost:3000/sign-in?reason=provider-mismatch");
                 return;
             }
 
@@ -81,11 +84,13 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             String encodedProvider = URLEncoder.encode(provider, StandardCharsets.UTF_8);
             String encodedProviderId = URLEncoder.encode(providerId, StandardCharsets.UTF_8);
 
+            String message = "signup".equals(mode) ? "new-user" : "not-registered";//모드 구분후 메시지 변경
+
             response.sendRedirect("http://localhost:3000/social-sign-up?email=" + encodedEmail
                     + "&name=" + encodedName
                     + "&provider=" + encodedProvider
                     + "&providerId=" + encodedProviderId
-                    + "&reason=not-registered");
+                    + "&reason=" + message);
         }
     }
 }

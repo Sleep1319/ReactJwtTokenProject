@@ -48,6 +48,10 @@ function SignUp() {
         setUsername("");
         setNickname("");
     };
+
+    const handleGoogleSignUp = () => {
+        window.location.href = "http://localhost:8084/oauth2/authorization/google?mode=signup";
+    };
     //온서브밋 = 버튼 타입 서브밋 온서브밋x = 버튼에 온클릭
     return (
         <main className="main" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '2rem' }}>
@@ -85,6 +89,9 @@ function SignUp() {
                 <Button variant="contained" type="submit" color="primary" fullWidth>
                     회원가입
                 </Button>
+            </Box>
+            <Box sx={{ marginTop: 2 }}>
+                <button onClick={handleGoogleSignUp}>구글 회원가입</button>
             </Box>
 
             <Box sx={{ marginTop: 2 }}>
